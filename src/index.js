@@ -10,7 +10,6 @@ const compiler = require('marko/compiler')
 const raptorAsync = require('raptor-async')
 
 const parseOpts = {}
-const writeToDisk = compiler.defaultOptions.writeToDisk
 
 function addCompileJob(asyncJobs, sourceFile) {
   const outFile = sourceFile + '.js'
@@ -55,7 +54,7 @@ function transformAST(file, input, callback) {
 
           node.arguments[0] = {
             'type': 'Literal',
-            'value': writeToDisk ? path + '.js' : path,
+            'value': path
           }
         }
       } else if (node.type === 'CallExpression' &&
@@ -83,7 +82,7 @@ function transformAST(file, input, callback) {
           node.arguments = [
             {
               'type': 'Literal',
-              'value': writeToDisk ? path + '.js' : path,
+              'value': path
             }
           ]
         }
@@ -95,11 +94,9 @@ function transformAST(file, input, callback) {
 
   const dirname = nodePath.dirname(file)
 
-  if (writeToDisk) {
-    for (let i = 0, len = templatePaths.length; i < len; i++) {
-      const templatePath = nodePath.resolve(dirname, templatePaths[i].path)
-      addCompileJob(asyncJobs, templatePath)
-    }
+  for (let i = 0, len = templatePaths.length; i < len; i++) {
+    const templatePath = nodePath.resolve(dirname, templatePaths[i].path)
+    addCompileJob(asyncJobs, templatePath)
   }
 
   const code = escodegen.generate(ast)
@@ -120,9 +117,7 @@ module.exports = function transform(file) {
       input += data
     },
     (end) => {
-      if (!writeToDisk && /.marko$/.test(file)) {
-        input = compiler.compile(input, file)
-      } else if (input.indexOf('.marko') === -1) {
+      if (input.indexOf('.marko') === -1) {
         stream.queue(input)
         return stream.queue(null)
       }
