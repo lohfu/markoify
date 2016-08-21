@@ -10,6 +10,7 @@
     "url": "https://github.com/marko-js/markoify.git"
   },
   "scripts": {
+    "lint": "eslint lib/",
     "test": "node_modules/.bin/mocha --ui bdd --reporter spec ./test/test.js",
     "test:no-write": "node_modules/.bin/mocha --ui bdd --reporter spec ./test/test-no-write.js"
   },
@@ -30,6 +31,9 @@
   "devDependencies": {
     "browserify": "^13.0.0",
     "chai": "^3.5.0",
+    "eslint": "^3.3.1",
+    "eslint-config-airbnb-base": "^5.0.2",
+    "eslint-plugin-import": "^1.13.0",
     "mocha": "^2.4.5",
     "view-engine": "^1.1.1"
   },
