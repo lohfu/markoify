@@ -1,6 +1,6 @@
 'use strict'
 
-const nodePath = require('path')
+const p = require('path')
 const esprima = require('esprima')
 const escodegen = require('escodegen')
 const estraverse = require('estraverse')
@@ -56,7 +56,7 @@ function transformAST(file, input, callback) {
           node.arguments.length === 1 &&
           node.arguments[0].type === 'Literal') {
         path = node.arguments[0].value
-        ext = nodePath.extname(path)
+        ext = p.extname(path)
 
         if (ext === '.marko') {
           templatePaths.push({
@@ -78,7 +78,7 @@ function transformAST(file, input, callback) {
           node.arguments.length === 1 &&
           node.arguments[0].type === 'Literal') {
         path = node.arguments[0].value
-        ext = nodePath.extname(path)
+        ext = p.extname(path)
 
         if (ext === '.marko') {
           templatePaths.push({
@@ -104,10 +104,10 @@ function transformAST(file, input, callback) {
 
   const asyncJobs = []
 
-  const dirname = nodePath.dirname(file)
+  const dirname = p.dirname(file)
 
   for (let i = 0, len = templatePaths.length; i < len; i++) {
-    const templatePath = nodePath.resolve(dirname, templatePaths[i].path)
+    const templatePath = p.resolve(dirname, templatePaths[i].path)
     addCompileJob(asyncJobs, templatePath)
   }
 
