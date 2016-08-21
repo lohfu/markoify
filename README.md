@@ -1,82 +1,74 @@
-markoify
-========
+# rollup-plugin-marko
 
-This Browserify transform results in any referenced Marko templates to automatically be compiled and bundled up so that the templates can be rendered in the browser.
+Compiles marko templates
 
-# Installation
+## This is only a Proof of Concept!
 
-```bash
-npm install markoify --save
-```
+WARNING!!! This is only a proof of concept, and is not yet fully tested.
 
-# Usage:
-
-```bash
-browserify -t markoify main.js > browser.js
-```
-
-# Example
-
-__my-project/template.marko:__
-
-```html
-Hello ${data.name}!
-```
-
-__my-project/main.js:__
-
-```javascript
-var template = require('./template.marko');
-template.render({
-        name: 'World'
-    },
-    function(err, output) {
-        console.log('Output: ', output)
-    });
-```
-
-```bash
-browserify -t markoify main.js > browser.js
-```
-
-Page HTML:
+## NPM
 
 ```
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Marko+Browserify Test</title>
-    </head>
-    <body>
-        <script src="browser.js"></script>
-    </body>
-</html>
+$ npm install rollup-plugin-marko
 ```
 
-Browser output:
+## Example
+
+NOTE: You have to provide the `process` global for Marko to work outside of CommonJS
+bundlers.
+
+### process.js
 
 ```
-Output: Hello World!
+window.process = {
+  browser: true,
+  env: {},
+  nextTick: (fnc) => {
+    setTimeout(fnc)
+  }
+}
 ```
 
-# Further Reading
+### rollup.config.js
 
-* [Marko](https://github.com/marko-js/marko)
-* [Lasso.js](https://github.com/lasso-js/lasso) (alternative to Browserify)
+```
+import babel from 'rollup-plugin-babel'
+import commonjs from 'rollup-plugin-commonjs'
+import nodeResolve from 'rollup-plugin-node-resolve'
+import nodeGlobals from 'rollup-plugin-node-globals'
+import marko from 'rollup-plugin-marko'
 
-# Discuss
+export default {
+  plugins: [
+    marko(),
+    babel({
+      exclude: 'node_modules/**'
+    }),
+    nodeResolve({
+      jsnext: true,  // Default: false
+      main: true,  // Default: true
+      browser: true,  // Default: false
+      preferBuiltins: false
+    }),
 
-If you have any questions or run into any problems, please reach out to us in the [Marko Gitter chat room](https://gitter.im/marko-js/marko) or open a Github issue.
+    commonjs({
+      include: [ 'node_modules/**', 'src/**/*.marko', 'src/**/*.marko.js'],
+      extensions: [ '.js', '.marko' ],
+      sourceMap: true
+    }),
+  ],
+  entry: 'src/app.js'
+  sourceMap: true,
+  format: 'iife'
+}
+```
 
-# Contributors
 
-* [Patrick Steele-Idem](https://github.com/patrick-steele-idem) (Twitter: [@psteeleidem](http://twitter.com/psteeleidem))
+## TODO
 
-# Contribute
-
-Pull Requests welcome. Please submit Github issues for any feature enhancements, bugs or documentation problems.
-
-# License
-
-Apache License v2.0
++ Implement source maps correctly (but they are probably not even needed as
+  long as this plugin is loaded first)
++ Currently this plugin only transforms `marko.js`, and `.marko` files. Ie, if there
+  are any require.resolve('./template.marko') in other js files they will not be fixed
++ Async jobs for compiled nested templates (required templates)
++ Tests
