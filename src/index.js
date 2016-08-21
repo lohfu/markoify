@@ -39,6 +39,18 @@ function transformAST(file, input, callback) {
       let ext
 
       if (node.type === 'CallExpression' &&
+          node.callee.type === 'MemberExpression' &&
+          node.callee.property.type === 'Identifier' &&
+          node.callee.property.name === 'c' &&
+          node.arguments.length === 1 &&
+          node.arguments[0].type === 'Identifier' &&
+          node.arguments[0].name === '__filename'
+      ) {
+        node.arguments = [{
+          'type': 'Literal',
+          'value': file
+        }]
+      } else if (node.type === 'CallExpression' &&
           node.callee.type === 'Identifier' &&
           node.callee.name === 'require' &&
           node.arguments.length === 1 &&
