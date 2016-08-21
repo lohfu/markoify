@@ -1,8 +1,8 @@
 {
-  "name": "markoify",
-  "description": "Marko transform for Browserify",
+  "name": "rollup-plugin-marko",
+  "description": "Marko transform/plugin for Rollup",
   "keywords": [
-    "browserify",
+    "rollup-plugin",
     "marko"
   ],
   "repository": {
@@ -17,9 +17,10 @@
   "author": "Patrick Steele-Idem <pnidem@gmail.com>",
   "contributors": [
     "Patrick Steele-Idem <pnidem@gmail.com>",
-    "Phillip Gates-Idem <phillip.idem@gmail.com>"
+    "Phillip Gates-Idem <phillip.idem@gmail.com>",
+    "Linus Miller <lohfu@lohfu.io> (https://lohfu.io/)"
   ],
-  "maintainers": "Patrick Steele-Idem <pnidem@gmail.com>",
+  "maintainers": "Linus Miller <lohfu@lohfu.io> (https://lohfu.io/)",
   "dependencies": {
     "escodegen": "^1.8.0",
     "esprima": "^2.7.2",
@@ -37,11 +38,11 @@
     "mocha": "^2.4.5",
     "view-engine": "^1.1.1"
   },
-  "license": "Apache License v2.0",
+  "license": "MIT",
   "bin": {},
   "main": "lib/markoify.js",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
-  "version": "2.1.1"
+  "version": "0.0.0"
 }
