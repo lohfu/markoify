@@ -40,7 +40,7 @@
   },
   "license": "MIT",
   "bin": {},
-  "main": "lib/markoify.js",
+  "main": "src/index.js",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
